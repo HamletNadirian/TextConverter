@@ -19,13 +19,12 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 fun TabsContent(pagerState: PagerState) {
     HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize().padding(20.dp)
+        modifier = Modifier.fillMaxSize().padding(8.dp),
     ) { page ->
         when (page) {
             0 -> CodecScreen()
-            1 -> StylishScreen()//TODO
-            2 -> StylishScreen()
-            3 -> StylishScreen()
+            1 -> StylishScreen()
+
         }
     }
 }

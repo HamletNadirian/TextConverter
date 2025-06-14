@@ -23,7 +23,8 @@ fun CodecScreen(viewModel: CodecViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(WindowInsets.ime.asPaddingValues()),
+            .padding(8.dp),
+                // .padding(WindowInsets.ime.asPaddingValues()),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -46,7 +47,6 @@ fun CodecScreen(viewModel: CodecViewModel = viewModel()) {
         )
 
         // Нижнее поле — пол‑экрана
-
         OutlinedTextField(
             value = state.resultText,
             onValueChange = { viewModel.decryptFromOutput(it) },
