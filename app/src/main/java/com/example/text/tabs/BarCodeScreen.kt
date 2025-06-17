@@ -39,9 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import com.example.text.viewmodel.BarCodeGenerator.BarcodeFromGalleryScreen
-import com.example.text.viewmodel.BarCodeUiState
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.common.InputImage
+
 import java.io.IOException
 
 
@@ -78,8 +76,6 @@ fun BarCodeScreen(viewModel: BarCodeViewModel = viewModel()) {
             Text("Generate Barcode")
         }
 
-
-
         state.barcodeBitmap?.let { bitmap ->
             Image(
                 bitmap = bitmap.asImageBitmap(),
@@ -115,8 +111,9 @@ fun UiGallery(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Button(onClick = onImagePickClick) {
             Text("Выбрать изображение")
@@ -128,7 +125,7 @@ fun UiGallery(
                 contentDescription = "Загруженное изображение",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(200.dp)
                     .padding(vertical = 8.dp)
             )
         }
