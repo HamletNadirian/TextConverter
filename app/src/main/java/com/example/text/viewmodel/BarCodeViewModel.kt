@@ -43,23 +43,30 @@ import kotlinx.coroutines.flow.update
 import java.io.InputStream
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
+import com.example.text.viewmodel.BarCodeGenerator.generate
 import java.io.IOException
 
 data class BarCodeUiState(
     val inputText: String = "",
-    val barcodeBitmap: Bitmap? = null
+    val generatedBitmap: Bitmap? = null,
+    val galleryBitmap: Bitmap? = null,
+    val decodedText: String? = null
 )
 
 class BarCodeViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(BarCodeUiState())
     val uiState: StateFlow<BarCodeUiState> = _uiState
-    internal fun updateInput(text: String) {
+    fun updateInput(text: String) {
         _uiState.update { it.copy(inputText = text) }
     }
 
-    fun generateBarCode(data: String) {
-        val bitmap = BarCodeGenerator.generate(data)
-        _uiState.update { it.copy(barcodeBitmap = bitmap) }
+    fun generateBarCode(text: String) {
+        val bitmap = generate(text)
+        _uiState.update { it.copy(generatedBitmap = bitmap) }
+    }
+
+    fun updateGalleryBitmap(bitmap: Bitmap) {
+        _uiState.update { it.copy(galleryBitmap = bitmap) }
     }
 }
 
@@ -128,6 +135,7 @@ object BarCodeGenerator {
                     barcodeText = "Произошла ошибка: ${e.localizedMessage}"
                 }
             }
+
         }
 
         UiGallery(

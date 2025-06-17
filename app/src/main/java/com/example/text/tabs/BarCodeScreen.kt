@@ -63,8 +63,7 @@ fun BarCodeScreen(viewModel: BarCodeViewModel = viewModel()) {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
             singleLine = true,
-            maxLines = 1,
-            textStyle = LocalTextStyle.current
+            textStyle = LocalTextStyle.current,
         )
 
         Button(
@@ -76,7 +75,7 @@ fun BarCodeScreen(viewModel: BarCodeViewModel = viewModel()) {
             Text("Generate Barcode")
         }
 
-        state.barcodeBitmap?.let { bitmap ->
+        state.generatedBitmap?.let { bitmap ->
             Image(
                 bitmap = bitmap.asImageBitmap(),
                 contentDescription = "Generated barcode",
@@ -87,11 +86,11 @@ fun BarCodeScreen(viewModel: BarCodeViewModel = viewModel()) {
         }
         val context = LocalContext.current
         Button(onClick = {
-            state.barcodeBitmap?.let {
+            state.generatedBitmap?.let {
                 val success = saveBitmapToGallery(context, it)
                 Toast.makeText(
                     context,
-                    if (success) "Сохранено!" else "Ошибка сохранения",
+                    if (success) "Сохранено!" else "Сначала создайте QR-код",
                     Toast.LENGTH_SHORT
                 ).show()
             }
