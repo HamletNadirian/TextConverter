@@ -1,0 +1,116 @@
+package com.example.text.viewmodel
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import com.example.text.tabs.UiGallery
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.common.InputImage
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.common.BitMatrix
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import java.io.InputStream
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
+
+data class BarCodeUiState(
+    val inputText: String = "",
+    val barcodeBitmap: Bitmap? = null
+)
+
+class BarCodeViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(BarCodeUiState())
+    val uiState: StateFlow<BarCodeUiState> = _uiState
+    internal fun updateInput(text: String) {
+        _uiState.update { it.copy(inputText = text) }
+    }
+
+    fun generateBarCode(data: String) {
+        val bitmap = BarCodeGenerator.generate(data)
+        _uiState.update { it.copy(barcodeBitmap = bitmap) }
+    }
+}
+
+object BarCodeGenerator {
+    fun generate(data: String): Bitmap? {
+        return try {
+            val writer = com.google.zxing.MultiFormatWriter()
+            val bitMatrix = writer.encode(data, com.google.zxing.BarcodeFormat.CODE_128, 600, 300)
+            val width = bitMatrix.width
+            val height = bitMatrix.height
+            val bmp = createBitmap(width, height, Bitmap.Config.RGB_565)
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    bmp[x, y] =
+                        if (bitMatrix[x, y]) android.graphics.Color.BLACK else android.graphics.Color.WHITE
+                }
+            }
+            bmp
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    @Composable
+    fun BarcodeFromGalleryScreen() {
+        val context = LocalContext.current
+        var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+        var barcodeText by remember { mutableStateOf<String?>(null) }
+
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            uri?.let {
+                val source = ImageDecoder.createSource(context.contentResolver, uri)
+                val bmp = ImageDecoder.decodeBitmap(source)
+                bitmap = bmp
+
+                // Распознаем штрихкод
+                val image = InputImage.fromBitmap(bmp, 0)
+                val scanner = BarcodeScanning.getClient()
+
+                scanner.process(image)
+                    .addOnSuccessListener { barcodes ->
+                        barcodeText = barcodes.joinToString("\n") { it.rawValue ?: "?" }
+                    }
+                    .addOnFailureListener {
+                        barcodeText = "Ошибка: ${it.localizedMessage}"
+                    }
+            }
+        }
+
+        UiGallery(
+            bitmap = bitmap,
+            barcodeText = barcodeText,
+            onImagePickClick = { launcher.launch("image/*") }
+        )
+    }
+}

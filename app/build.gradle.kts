@@ -42,6 +42,8 @@ android {
 dependencies {
     implementation(libs.bcpkix)
     implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.zxing.android.embedded)
+    implementation(libs.mlkit.barcode)
 
     implementation(libs.javax.mail)
     implementation(libs.commons.codec)

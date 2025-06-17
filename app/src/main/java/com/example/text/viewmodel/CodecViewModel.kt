@@ -33,7 +33,6 @@ class CodecViewModel : ViewModel() {
         _uiState.update { it.copy(selectedCipher = cipher) }
         updateResultEncryption()
         updateResultDecryption()
-
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun encryptFromInput(input: String) {

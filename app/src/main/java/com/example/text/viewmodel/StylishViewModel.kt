@@ -41,7 +41,7 @@ class StylishViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(StylishUiState())
     val uiState: StateFlow<StylishUiState> = _uiState
 
-    fun changeFont(inputText: String) {
+    fun updateInputText(inputText: String) {
         val fancyText = toFancyUnicode(inputText, _uiState.value.selectedStyle)
         _uiState.update { it.copy(inputText = inputText, resultText = fancyText) }
     }

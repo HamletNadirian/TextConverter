@@ -1,35 +1,45 @@
 package com.example.text.tabs
 
-import androidx.compose.ui.tooling.preview.Preview
-
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.text.ui.theme.TextTheme
-import com.example.text.viewmodel.StylishViewModel
-
-// Кастомный шрифт
-
+import com.example.text.viewmodel.DecorateViewModel
 
 @Composable
-fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
+fun DecorateScreen(viewModel: DecorateViewModel = viewModel()) {
+
     val state by viewModel.uiState.collectAsState()
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
@@ -52,18 +62,18 @@ fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
             modifier = Modifier.fillMaxSize()
         ) {
             itemsIndexed(
-                listOf("Cool Font", "Gothic", "Bold", "Fraktur")
+                listOf("1", "2", "3", "4")
             ) { index, styleName ->
-                StylishTextItem(
-                    text = viewModel.toFancyUnicode(
+                StylishTextItemDecor (
+                    text = viewModel.insertBetweenSpaces(
                         state.inputText.ifEmpty { "Enter Text" },
                         index
                     ),
                     styleName = styleName,
-                    isSelected = index == state.selectedStyle,
-                    onClick = { viewModel.changeStyle(index) },
+                    isSelected = index == state.selectedDecorateStyle,
+                    onClick = { viewModel.applyTextStyle(index) },
                     onCopyClick = {
-                        val displayText = viewModel.toFancyUnicode(
+                        val displayText = viewModel.insertBetweenSpaces(
                             state.inputText.ifEmpty { "Enter Text" },
                             index
                         )
@@ -71,7 +81,7 @@ fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
                         Toast.makeText(context, "Text copied!", Toast.LENGTH_SHORT).show()
                     },
                     onShareClick = {
-                        val displayText = viewModel.toFancyUnicode(
+                        val displayText = viewModel.insertBetweenSpaces(
                             state.inputText.ifEmpty { "Enter Text" },
                             index
                         )
@@ -86,9 +96,8 @@ fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
         }
     }
 }
-
 @Composable
-fun StylishTextItem(
+fun StylishTextItemDecor(
     text: String,
     styleName: String,
     isSelected: Boolean,
@@ -144,13 +153,13 @@ fun StylishTextItem(
             Column(
                 modifier = Modifier.weight(1f),
 
-            ) {
-             /*   Text(
-                    text = styleName,
-                    fontSize = 14.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )*/
+                ) {
+                /*   Text(
+                       text = styleName,
+                       fontSize = 14.sp,
+                       color = Color.Gray,
+                       modifier = Modifier.padding(bottom = 4.dp)
+                   )*/
                 Text(
                     text = text,
                     fontSize = 16.sp,
@@ -163,10 +172,8 @@ fun StylishTextItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun StylishScreenPreview() {
-    TextTheme {
-        StylishScreen()
-    }
+fun DecorateScreenPreview() {
+    DecorateScreen()
 }

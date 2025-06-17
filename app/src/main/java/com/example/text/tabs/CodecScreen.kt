@@ -13,7 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.example.text.components.CipherSelector
 import com.example.text.viewmodel.CodecViewModel
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.text.ui.theme.TextTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -56,6 +58,14 @@ fun CodecScreen(viewModel: CodecViewModel = viewModel()) {
                 .fillMaxWidth(),
             singleLine = false
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CodecScreenPreview() {
+    TextTheme {
+        CodecScreen()
     }
 }
 

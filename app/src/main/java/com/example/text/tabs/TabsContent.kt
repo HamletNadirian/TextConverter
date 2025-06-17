@@ -24,6 +24,8 @@ fun TabsContent(pagerState: PagerState) {
         when (page) {
             0 -> CodecScreen()
             1 -> StylishScreen()
+            2 -> DecorateScreen()
+            3 -> BarCodeScreen()
 
         }
     }
