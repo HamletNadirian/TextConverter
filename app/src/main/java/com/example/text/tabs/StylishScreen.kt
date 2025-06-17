@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,7 +46,10 @@ fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
             label = { Text("Enter text") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            singleLine = true,
+            maxLines = 1,
+            textStyle = LocalTextStyle.current
         )
 
         LazyColumn(
@@ -155,6 +159,8 @@ fun StylishTextItem(
                     text = text,
                     fontSize = 16.sp,
                     color = Color.Black,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
 

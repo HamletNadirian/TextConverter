@@ -4,8 +4,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +43,7 @@ import kotlinx.coroutines.flow.update
 import java.io.InputStream
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
+import java.io.IOException
 
 data class BarCodeUiState(
     val inputText: String = "",
@@ -89,21 +93,40 @@ object BarCodeGenerator {
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
             uri?.let {
-                val source = ImageDecoder.createSource(context.contentResolver, uri)
-                val bmp = ImageDecoder.decodeBitmap(source)
-                bitmap = bmp
-
-                // Распознаем штрихкод
-                val image = InputImage.fromBitmap(bmp, 0)
-                val scanner = BarcodeScanning.getClient()
-
-                scanner.process(image)
-                    .addOnSuccessListener { barcodes ->
-                        barcodeText = barcodes.joinToString("\n") { it.rawValue ?: "?" }
+                try {
+                    // Используем совместимый способ загрузки изображения
+                    val bmp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val source = ImageDecoder.createSource(context.contentResolver, uri)
+                        ImageDecoder.decodeBitmap(source)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
                     }
-                    .addOnFailureListener {
-                        barcodeText = "Ошибка: ${it.localizedMessage}"
-                    }
+
+                    bitmap = bmp
+
+                    // Распознаем штрихкод
+                    val image = InputImage.fromBitmap(bmp, 0)
+                    val scanner = BarcodeScanning.getClient()
+
+                    scanner.process(image)
+                        .addOnSuccessListener { barcodes ->
+                            if (barcodes.isNotEmpty()) {
+                                barcodeText = barcodes.joinToString("\n") { barcode ->
+                                    barcode.rawValue ?: "Неизвестный формат"
+                                }
+                            } else {
+                                barcodeText = "Штрихкод не найден"
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            barcodeText = "Ошибка распознавания: ${exception.localizedMessage}"
+                        }
+                } catch (e: IOException) {
+                    barcodeText = "Ошибка загрузки изображения: ${e.localizedMessage}"
+                } catch (e: Exception) {
+                    barcodeText = "Произошла ошибка: ${e.localizedMessage}"
+                }
             }
         }
 

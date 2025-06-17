@@ -20,6 +20,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,10 +54,14 @@ fun DecorateScreen(viewModel: DecorateViewModel = viewModel()) {
         OutlinedTextField(
             value = state.inputText,
             onValueChange = { viewModel.updateInputText(it) },
+
             label = { Text("Enter text") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            singleLine = true,
+            maxLines = 1,
+            textStyle = LocalTextStyle.current
         )
 
         LazyColumn(
@@ -164,6 +170,8 @@ fun StylishTextItemDecor(
                     text = text,
                     fontSize = 16.sp,
                     color = Color.Black,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
 

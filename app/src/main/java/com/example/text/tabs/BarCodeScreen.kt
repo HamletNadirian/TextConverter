@@ -5,10 +5,12 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -42,6 +45,7 @@ import com.google.mlkit.vision.common.InputImage
 import java.io.IOException
 
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun BarCodeScreen(viewModel: BarCodeViewModel = viewModel()) {
     val state by viewModel.uiState.collectAsState()
@@ -59,7 +63,10 @@ fun BarCodeScreen(viewModel: BarCodeViewModel = viewModel()) {
             label = { Text("Enter text") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            singleLine = true,
+            maxLines = 1,
+            textStyle = LocalTextStyle.current
         )
 
         Button(
@@ -95,17 +102,10 @@ fun BarCodeScreen(viewModel: BarCodeViewModel = viewModel()) {
         }) {
             Text("Сохранить")
         }
-        var showBarcode by remember { mutableStateOf(false) }
+        BarcodeFromGalleryScreen()
 
-        Column {
-            showBarcode = true
-            if (showBarcode) {
-                BarcodeFromGalleryScreen()
-            }
-        }
     }
 }
-
 @Composable
 fun UiGallery(
     bitmap: Bitmap?,
@@ -128,7 +128,8 @@ fun UiGallery(
                 contentDescription = "Загруженное изображение",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
+                    .height(300.dp)
+                    .padding(vertical = 8.dp)
             )
         }
 
@@ -137,13 +138,16 @@ fun UiGallery(
         barcodeText?.let {
             Text(
                 text = "Результат: $it",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(16.dp)
             )
         }
     }
 }
 
 
+
+@RequiresApi(Build.VERSION_CODES.P)
 @Preview
 @Composable
 fun BarCodeScreenPreview() {
