@@ -17,7 +17,7 @@ class DecorateViewModel: ViewModel(){
     private val _uiState = MutableStateFlow(DecorateUiState())
     val uiState: StateFlow<DecorateUiState> = _uiState
 
-    private val decoStyles = listOf(
+     val decoStyles = listOf(
         // Стиль 1: Cool Font
         listOf(
             "-ˏˋ♥̩͙♥̩̩̥͙♥̩̥̩ ⑅   ⑅ ♥̩̥̩♥̩̩̥͙♥̩͙ˊˎ"
@@ -30,6 +30,48 @@ class DecorateViewModel: ViewModel(){
         ),
         listOf(
             "＊*•̩̩͙✩•̩̩͙*˚   ˚*•̩̩͙✩•̩̩͙*˚＊"
+        ),
+        listOf(
+            "«·´`·.(*·.¸(`·.¸*   *¸.·´)¸.·*).·´`·»"
+        ),
+        // Стиль 2: Gothic
+        listOf("☆★☆★→   ←☆★☆★"),
+        // Стиль 3: Bold
+        listOf(
+            "(๑ ⌾⃝ ꇴ ⌾⃝ ๑)⊃━*:༅｡༅:*ﾟ:*:✼✿   ✿✼:*ﾟ:༅｡༅:*･ﾟﾟ･"
+        ),
+        listOf(
+            ":۞:••:۞:••:«   »:••:۞:••:۞:"
+        ),
+        listOf(
+            "╰┈➤   ❝"
+        ),
+        listOf(
+            "୨⎯  ⎯୧ "
+        ),
+        listOf(
+            "♪♫•*¨*•.¸¸❤   ❤¸¸.•*¨*•♫♪"
+        ),
+        listOf(
+            "↤↤↤↤↤   ↦↦↦↦↦"
+        ),
+        listOf(
+            "♡+*   *+♡"
+        ),
+        listOf(
+            "(¯`·.¸¸.·´¯`·.¸¸.->  <-.¸¸.·´¯`·.¸¸.·´¯)"
+        ),
+        listOf(
+            "♱★   ★♱"
+        ),
+        listOf(
+            "૮꒰ ˶• ༝ •˶꒱ა   ૮꒰ ˶• ༝ •˶꒱ა"
+        ),
+        listOf(
+            "❁•❁•❁•❁•❁•❁•   ❁•❁•❁•❁•❁•❁ "
+        ),
+        listOf(
+            "༺♥༻❀༺♥༻   ༺♥༻❀༺♥༻"
         )
     )
 

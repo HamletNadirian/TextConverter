@@ -26,9 +26,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.text.ui.theme.TextTheme
 import com.example.text.viewmodel.StylishViewModel
 
-// Кастомный шрифт
-
-
 @Composable
 fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
     val state by viewModel.uiState.collectAsState()
@@ -55,15 +52,14 @@ fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            itemsIndexed(
-                listOf("Cool Font", "Gothic", "Bold", "Fraktur")
-            ) { index, styleName ->
+            itemsIndexed(List(viewModel.fancyStyles.size) { it })
+            { index, styleName ->
                 StylishTextItem(
                     text = viewModel.toFancyUnicode(
                         state.inputText.ifEmpty { "Enter Text" },
                         index
                     ),
-                    styleName = styleName,
+                   // styleName = styleName,
                     isSelected = index == state.selectedStyle,
                     onClick = { viewModel.changeStyle(index) },
                     onCopyClick = {
@@ -94,7 +90,7 @@ fun StylishScreen(viewModel: StylishViewModel = viewModel()) {
 @Composable
 fun StylishTextItem(
     text: String,
-    styleName: String,
+    //styleName: String,
     isSelected: Boolean,
     onClick: () -> Unit,
     onCopyClick: () -> Unit,

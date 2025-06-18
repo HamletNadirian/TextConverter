@@ -67,15 +67,13 @@ fun DecorateScreen(viewModel: DecorateViewModel = viewModel()) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            itemsIndexed(
-                listOf("1", "2", "3", "4")
-            ) { index, styleName ->
+            itemsIndexed(List(viewModel.decoStyles.size) { it })
+            { index, styleName ->
                 StylishTextItemDecor (
                     text = viewModel.insertBetweenSpaces(
                         state.inputText.ifEmpty { "Enter Text" },
                         index
                     ),
-                    styleName = styleName,
                     isSelected = index == state.selectedDecorateStyle,
                     onClick = { viewModel.applyTextStyle(index) },
                     onCopyClick = {
@@ -105,7 +103,7 @@ fun DecorateScreen(viewModel: DecorateViewModel = viewModel()) {
 @Composable
 fun StylishTextItemDecor(
     text: String,
-    styleName: String,
+    //styleName: String,
     isSelected: Boolean,
     onClick: () -> Unit,
     onCopyClick: () -> Unit,
