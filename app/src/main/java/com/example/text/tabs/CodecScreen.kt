@@ -26,11 +26,9 @@ fun CodecScreen(viewModel: CodecViewModel = viewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp),
-                // .padding(WindowInsets.ime.asPaddingValues()),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Верхнее поле — пол‑экрана
         OutlinedTextField(
             value = state.inputText,
             onValueChange = { viewModel.encryptFromInput(it) },
@@ -41,14 +39,12 @@ fun CodecScreen(viewModel: CodecViewModel = viewModel()) {
             singleLine = false
         )
 
-        // Селектор занимает ровно столько, сколько нужно ему по высоте
         CipherSelector(
             selected = state.selectedCipher,
             onSelected = viewModel::onCipherSelected,
 
         )
 
-        // Нижнее поле — пол‑экрана
         OutlinedTextField(
             value = state.resultText,
             onValueChange = { viewModel.decryptFromOutput(it) },
