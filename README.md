@@ -16,7 +16,9 @@ User-friendly interface with font and algorithm selection
 Supports multi-line input and output
 
 Screenshots
-![Codec](docs/images/codec.jpg)
-![Stylish](docs/images/stylish.jpg)
-![Decorate](docs/images/decorate.jpg)
-![Barcode](docs/images/barcode.jpg)
+<p float="left">
+  <img src="docs/images/codec.jpg" width="150" style="margin-right:10px;" />
+  <img src="docs/images/barcode.jpg" width="150" style="margin-right:10px;" />
+  <img src="docs/images/stylish.jpg" width="150" style="margin-right:10px;" />
+  <img src="docs/images/decorate.jpg" width="150" />
+</p>
